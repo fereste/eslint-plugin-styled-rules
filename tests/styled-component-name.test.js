@@ -2,8 +2,15 @@ const { RuleTester } = require('eslint');
 const styledComponentNameRule = require('../rules/styled-component-name');
 
 const ruleTester = new RuleTester({
-    parserOptions: { ecmaVersion: 'latest' }
+    parserOptions: {
+        ecmaVersion: 2015,
+        sourceType: 'module',
+        ecmaFeatures: {
+            jsx: true,
+        },
+    }
 });
+
 ruleTester.run('styled-component-name', styledComponentNameRule, {
     valid: [
         { code: 'const BoxStyled = styled(Box)(() => ({}));' },
@@ -11,6 +18,7 @@ ruleTester.run('styled-component-name', styledComponentNameRule, {
         { code: 'const BoxStyled = styled(Box)(() => ({})), other = 44;' },
         { code: 'const BoxStyled = styled(Box)(() => ({})), Boxother = styled(Box)(() => ({}));' },
         { code: 'const DivStyled = styled("div")(() => ({}));' },
+        { code: 'const BoxStyled = styled((props) => <Box component="span" />)(() => ({}));' },
         { code: 'const someRandomVariable = myFunction(Box);' },
     ],
     invalid: [
